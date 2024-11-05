@@ -6,13 +6,19 @@ import org.mvel2.integration.VariableResolverFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public interface MvelExpressionEvaluationService {
+public interface Mvel2EvaluationService {
 
     @Nonnull
     ParserContext buildParserContext(@Nonnull Set<Class<?>> classImports, Set<String> packageImports);
+
+    @Nonnull
+    @SuppressWarnings("rawtypes")
+    ParserContext buildParserContext(@Nonnull Set<Class<?>> classImports, @Nonnull Set<String> packageImports,
+                                     @Nonnull Map<String, Class> variables);
 
     @Nonnull
     ExecutableStatement compileExpression(@Nonnull String expression, @Nonnull ParserContext parserContext);

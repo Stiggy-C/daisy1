@@ -4,8 +4,8 @@ import com.github.f4b6a3.uuid.UuidCreator
 import io.openenterprise.daisy.domain.Parameter
 import io.openenterprise.daisy.mvel2.Mvel2Operation
 import io.openenterprise.daisy.mvel2.Mvel2OperationImpl
-import io.openenterprise.daisy.service.MvelExpressionEvaluationService
-import io.openenterprise.daisy.service.MvelExpressionEvaluationServiceImpl
+import io.openenterprise.daisy.service.Mvel2EvaluationService
+import io.openenterprise.daisy.service.Mvel2EvaluationServiceImpl
 import org.apache.commons.lang3.reflect.MethodUtils
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
@@ -30,10 +30,10 @@ import javax.cache.Cache
 class Mvel2OperationImplTest {
 
     @Autowired
-    protected lateinit var mvel2Operation: Mvel2OperationImpl<Any>
+    lateinit var mvel2Operation: Mvel2OperationImpl<Any>
 
     @Autowired
-    protected lateinit var variableResolverFactoryCache: Cache<UUID, VariableResolverFactory>
+    lateinit var variableResolverFactoryCache: Cache<UUID, VariableResolverFactory>
 
     @Order(2)
     @Test
@@ -121,8 +121,8 @@ class Mvel2OperationImplTest {
         }
 
         @Bean
-        fun mvelExpressionEvaluationService(): MvelExpressionEvaluationService {
-            return MvelExpressionEvaluationServiceImpl()
+        fun mvelExpressionEvaluationService(): Mvel2EvaluationService {
+            return Mvel2EvaluationServiceImpl()
         }
     }
 }

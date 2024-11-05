@@ -30,7 +30,7 @@ public class RunnerImpl implements Runner {
                 .peek(invocation -> invocation.operation.postInvoke(invocationContext, invocation, invocation.result))
                 .forEachOrdered(invocation -> {
                     invocationContext.currentInvocation = null;
-                    invocationContext.previousInvocation.add(invocation);
+                    invocationContext.previousInvocations.add(invocation);
                 });
     }
 
@@ -38,8 +38,7 @@ public class RunnerImpl implements Runner {
     public void run(@Nonnull UUID invocationContextId,
                     @Nonnull List<Pair<Operation<?>, Parameters>> operationsAndParameters) {
         var invocationContext = Optional.ofNullable(invocationContextCache.get(invocationContextId)).orElseGet(() -> {
-            var thisInvocationContext = new InvocationContext(invocationContextId);
-            thisInvocationContext.setPreviousInvocation(new TreeSet<>(Comparator.comparing(Invocation::getId)));
+            var thisInvocationContext = new InvocationContext.Builder().withId(invocationContextId).build();
 
             try {
                 return thisInvocationContext;

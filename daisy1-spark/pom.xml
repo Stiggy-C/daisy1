@@ -21,6 +21,12 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.openenterprise.daisy1</groupId>
+            <artifactId>daisy1-test</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-connect-client-jvm_2.13</artifactId>
             <version>${spark.version}</version>

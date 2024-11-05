@@ -10,12 +10,13 @@ import org.mvel2.integration.VariableResolverFactory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 
 @Named
-public class MvelExpressionEvaluationServiceImpl implements MvelExpressionEvaluationService {
+public class Mvel2EvaluationServiceImpl implements Mvel2EvaluationService {
 
     /**
      * Default org.mvel2.ParserContext
@@ -30,6 +31,17 @@ public class MvelExpressionEvaluationServiceImpl implements MvelExpressionEvalua
 
         classImports.forEach(parserContext::addImport);
         packageImports.forEach(parserContext::addPackageImport);
+
+        return parserContext;
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings("rawtypes")
+    public ParserContext buildParserContext(@Nonnull Set<Class<?>> classImports, @Nonnull Set<String> packageImports,
+                                            @Nonnull Map<String, Class> variables) {
+        var parserContext = buildParserContext(classImports, packageImports);
+        parserContext.addVariables(variables);
 
         return parserContext;
     }

@@ -23,5 +23,8 @@
 hs_err_pid*
 replay_pid*
 
-# Maven build dir
-!/*/target/*
+# Build dir
+/daisy1-core/target/
+/daisy1-graalvm/target/
+/daisy1-spark/target/
+/daisy1-test/target/

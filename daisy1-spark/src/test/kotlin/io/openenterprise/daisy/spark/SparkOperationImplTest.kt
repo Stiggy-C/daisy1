@@ -4,8 +4,8 @@ import com.github.f4b6a3.uuid.UuidCreator
 import io.openenterprise.daisy.*
 import io.openenterprise.daisy.domain.Parameter
 import io.openenterprise.daisy.mvel2.Mvel2OperationImpl
-import io.openenterprise.daisy.service.MvelExpressionEvaluationService
-import io.openenterprise.daisy.service.MvelExpressionEvaluationServiceImpl
+import io.openenterprise.daisy.service.Mvel2EvaluationService
+import io.openenterprise.daisy.service.Mvel2EvaluationServiceImpl
 import io.openenterprise.test.junit.jupiter.SparkExtension
 import org.apache.commons.lang3.reflect.MethodUtils
 import org.apache.spark.sql.Dataset
@@ -78,8 +78,8 @@ open class SparkOperationImplTest {
 
 
         @Bean
-        fun mvelExpressionEvaluationService(): MvelExpressionEvaluationService {
-            return MvelExpressionEvaluationServiceImpl()
+        fun mvelExpressionEvaluationService(): Mvel2EvaluationService {
+            return Mvel2EvaluationServiceImpl()
         }
 
         @Bean

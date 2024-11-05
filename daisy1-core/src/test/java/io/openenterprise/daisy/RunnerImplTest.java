@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import io.openenterprise.daisy.domain.Parameter;
 import io.openenterprise.daisy.mvel2.Mvel2Operation;
 import io.openenterprise.daisy.mvel2.Mvel2OperationImpl;
-import io.openenterprise.daisy.service.MvelExpressionEvaluationService;
-import io.openenterprise.daisy.service.MvelExpressionEvaluationServiceImpl;
+import io.openenterprise.daisy.service.Mvel2EvaluationService;
+import io.openenterprise.daisy.service.Mvel2EvaluationServiceImpl;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -49,10 +49,10 @@ class RunnerImplTest {
 
         runner.run(invocationContext, operationsAndParameters);
 
-        Assertions.assertFalse(CollectionUtils.isEmpty(invocationContext.previousInvocation));
-        Assertions.assertTrue(invocationContext.previousInvocation.stream()
+        Assertions.assertFalse(CollectionUtils.isEmpty(invocationContext.previousInvocations));
+        Assertions.assertTrue(invocationContext.previousInvocations.stream()
                 .noneMatch(invocation -> Objects.isNull(invocation.getResult())));
-        Assertions.assertEquals(1, invocationContext.previousInvocation.getLast().result);
+        Assertions.assertEquals(1, invocationContext.previousInvocations.getLast().result);
     }
 
     @TestConfiguration
@@ -64,8 +64,8 @@ class RunnerImplTest {
         }
 
         @Bean
-        protected MvelExpressionEvaluationService mvelExpressionEvaluationService() {
-            return new MvelExpressionEvaluationServiceImpl();
+        protected Mvel2EvaluationService mvelExpressionEvaluationService() {
+            return new Mvel2EvaluationServiceImpl();
         }
 
         @Bean

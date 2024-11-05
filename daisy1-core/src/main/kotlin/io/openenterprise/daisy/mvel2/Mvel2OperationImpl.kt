@@ -7,13 +7,17 @@ import io.openenterprise.daisy.InvocationContext
 import io.openenterprise.daisy.Parameters
 import io.openenterprise.daisy.domain.Parameter
 import io.openenterprise.daisy.mvel2.integration.impl.CachingMapVariableResolverFactory
-import io.openenterprise.daisy.service.MvelExpressionEvaluationService
+import io.openenterprise.daisy.service.Mvel2EvaluationService
 import jakarta.inject.Inject
 import jakarta.inject.Named
+import org.apache.commons.lang3.ArrayUtils
 import org.apache.commons.lang3.ClassUtils
+import org.apache.commons.lang3.tuple.Pair
+import org.mvel2.MVEL
 import org.mvel2.integration.VariableResolverFactory
 import java.util.*
 import java.util.function.Consumer
+import java.util.stream.Collectors
 import javax.annotation.Nonnull
 import javax.cache.Cache
 
@@ -25,7 +29,7 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
     protected lateinit var builtInMvelVariables: Map<String, Any>
 
     @Inject
-    protected lateinit var mvelExpressionEvaluationService: MvelExpressionEvaluationService
+    protected lateinit var mvel2EvaluationService: Mvel2EvaluationService
 
     @Inject
     protected lateinit var variableResolverFactoryCache: Cache<UUID, VariableResolverFactory>
@@ -34,25 +38,28 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
     override fun invoke(@Nonnull invocation: Invocation<*, T>): T? {
         val parameters: Parameters = invocation.parameters
 
-        val classImportsAsStringArray: Array<String> = readParameterValue(parameters, Parameter.MVEL_CLASS_IMPORTS)!!
-        val classImports = ClassUtils.convertClassNamesToClasses(classImportsAsStringArray.toList()).toSet()
+        val classImportsAsStringArray: Array<String>? = readParameterValue(parameters, Parameter.MVEL_CLASS_IMPORTS)
+        val classImports = if (ArrayUtils.isEmpty(classImportsAsStringArray)) {
+            Collections.emptySet<Class<*>>()
+        } else {
+            ClassUtils.convertClassNamesToClasses(classImportsAsStringArray!!.toList()).toSet()
+        }
 
-        val packageImportsAsStringArray: Array<String> = readParameterValue(parameters, Parameter.MVEL_PACKAGE_IMPORTS)!!
-        val packageImports = packageImportsAsStringArray.toSet()
-
-        val parserContext = mvelExpressionEvaluationService.buildParserContext(classImports,
-            packageImports);
+        val packageImportsAsStringArray: Array<String>? = readParameterValue(parameters, Parameter.MVEL_PACKAGE_IMPORTS)
+        val packageImports = if(ArrayUtils.isEmpty(packageImportsAsStringArray)) {
+            Collections.emptySet<String>()
+        } else {
+            packageImportsAsStringArray!!.toSet()
+        }
 
         val mvelExpressionsAsStringArray: Array<String> = readParameterValue(parameters, Parameter.MVEL_EXPRESSIONS)!!
-        val mvelExpressions = Arrays.stream(mvelExpressionsAsStringArray)
-            .map { string -> mvelExpressionEvaluationService.compileExpression(string, parserContext) }
-            .toList()
-
+        val parserContext = mvel2EvaluationService.buildParserContext(classImports,
+            packageImports)
         val variableResolverFactory = variableResolverFactoryCache.get(invocation.invocationContext.id)
 
         var result: Any? = null
-        for (mvelExpression in mvelExpressions) {
-            result = mvelExpressionEvaluationService.evaluate(mvelExpression, variableResolverFactory)
+        for (mvelExpressionString in mvelExpressionsAsStringArray) {
+            result = MVEL.eval(mvelExpressionString, parserContext, variableResolverFactory)
         }
 
         return result as T
