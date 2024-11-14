@@ -11,14 +11,24 @@ public abstract class AbstractOperationImpl<T> implements Operation<T> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractOperationImpl.class);
 
+    @Override
+    public void preInvoke(@Nonnull Invocation<? extends Operation<T>, T> invocation) {
+        preInvoke(invocation.invocationContext, invocation, invocation.parameters);
+    }
+
+    @Override
+    public void postInvoke(@Nonnull Invocation<? extends Operation<T>, T> invocation, @Nullable T result) {
+        postInvoke(invocation.invocationContext, invocation, result);
+    }
+
     protected void preInvoke(@Nonnull InvocationContext invocationContext,
-                             @Nonnull Invocation<? extends AbstractOperationImpl<T>, T> invocation,
+                             @Nonnull Invocation<? extends Operation<T>, T> invocation,
                              @Nonnull Parameters parameters) {
         LOGGER.debug("{}.preInvoke invoked", this.getClass());
     }
 
-    protected void postInvoke(@Nonnull InvocationContext invocationContext,
-                              @Nonnull Invocation<? extends AbstractOperationImpl<T>, T> invocation,
+    public void postInvoke(@Nonnull InvocationContext invocationContext,
+                              @Nonnull Invocation<? extends Operation<T>, T> invocation,
                               @Nullable T result) {
         LOGGER.debug("{}.postInvoke invoked", this.getClass());
     }

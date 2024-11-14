@@ -2,7 +2,7 @@ package io.openenterprise.daisy.spark
 
 import com.github.f4b6a3.uuid.UuidCreator
 import io.openenterprise.daisy.*
-import io.openenterprise.daisy.domain.Parameter
+import io.openenterprise.daisy.mvel2.domain.Parameter
 import io.openenterprise.daisy.mvel2.Mvel2OperationImpl
 import org.apache.commons.lang3.reflect.MethodUtils
 import org.apache.spark.sql.Dataset

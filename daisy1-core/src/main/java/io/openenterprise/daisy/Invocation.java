@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
-public class Invocation<T extends AbstractOperationImpl<S>, S> implements Serializable {
+public class Invocation<T extends Operation<S>, S> implements Serializable {
 
     public Invocation() {
         id = UuidCreator.getTimeOrderedWithRandom();

@@ -1,8 +1,7 @@
 package io.openenterprise.graalvm.polyglot.python
 
 import io.openenterprise.graalvm.polyglot.ContextBuilder
-import io.openenterprise.graalvm.polyglot.SupportedLanguage
-import io.openenterprise.graalvm.polyglot.SupportedLanguage.PYTHON
+import io.openenterprise.daisy.graalvm.domain.SupportedLanguage.PYTHON
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Runnable
@@ -23,7 +22,7 @@ class ContextBuilder : ContextBuilder {
 
     }
 
-    @Value("\${io.openenterprise.daisy.graalvm.python.executable:''}")
+    @Value("\${python.executable:''}")
     lateinit var pythonExecutableUriAsString: String
 
     @Nonnull

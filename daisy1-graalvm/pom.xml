@@ -16,11 +16,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>${cglib.version}</version>
-        </dependency>
-        <dependency>
             <groupId>io.openenterprise.daisy1</groupId>
             <artifactId>daisy1-core</artifactId>
             <version>${project.parent.version}</version>

@@ -1,4 +1,4 @@
-package io.openenterprise.daisy.domain;
+package io.openenterprise.daisy.mvel2.domain;
 
 import javax.annotation.Nonnull;
 

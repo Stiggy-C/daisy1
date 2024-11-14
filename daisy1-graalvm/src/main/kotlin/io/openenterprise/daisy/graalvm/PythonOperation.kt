@@ -1,4 +1,4 @@
-package io.openenterprise.daisy.python
+package io.openenterprise.daisy.graalvm
 
 import io.openenterprise.daisy.mvel2.Mvel2Operation
 import javax.annotation.Nullable

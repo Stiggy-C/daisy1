@@ -7,7 +7,9 @@ import org.mvel2.ParserConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import javax.annotation.Nonnull;
 import javax.cache.CacheManager;
@@ -15,7 +17,9 @@ import javax.cache.Caching;
 import java.util.Map;
 
 @Configuration
+@ComponentScan("io.openenterprise.daisy.aspectj")
 @EnableAutoConfiguration
+@EnableAspectJAutoProxy
 public class ApplicationConfiguration {
 
     @Bean("builtInMvelVariables")

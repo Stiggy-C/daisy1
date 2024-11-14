@@ -12,9 +12,9 @@ public class InvocationContext {
     @Setter
     protected UUID id;
 
-    protected Invocation<?, ?> currentInvocation;
+    protected Invocation<? extends Operation<?>, ?> currentInvocation;
 
-    protected SortedSet<Invocation<?, ?>> previousInvocations;
+    protected SortedSet<Invocation<? extends Operation<?>, ?>> previousInvocations;
 
     protected InvocationContext() {
         previousInvocations = new TreeSet<>(Comparator.comparing(Invocation::getId));
@@ -29,17 +29,19 @@ public class InvocationContext {
         assert Objects.nonNull(currentInvocation);
 
         previousInvocations.add(currentInvocation);
+
+        currentInvocation = null;
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Invocation<?, ?> getCurrentInvocation() {
+    public Invocation<? extends Operation<?>, ?> getCurrentInvocation() {
         return currentInvocation;
     }
 
-    public SortedSet<Invocation<?, ?>> getPreviousInvocation() {
+    public SortedSet<Invocation<? extends Operation<?>, ?>> getPreviousInvocation() {
         return previousInvocations;
     }
 
@@ -47,7 +49,7 @@ public class InvocationContext {
         this.id = id;
     }
 
-    public <T extends AbstractOperationImpl<S>, S> void setCurrentInvocation(@Nonnull Invocation<T, S> currentInvocation) {
+    public <T extends Operation<S>, S> void setCurrentInvocation(@Nonnull Invocation<T, S> currentInvocation) {
         this.currentInvocation = currentInvocation;
     }
 

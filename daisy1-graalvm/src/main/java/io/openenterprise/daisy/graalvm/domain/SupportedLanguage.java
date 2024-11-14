@@ -1,4 +1,4 @@
-package io.openenterprise.graalvm.polyglot;
+package io.openenterprise.daisy.graalvm.domain;
 
 import lombok.Getter;
 

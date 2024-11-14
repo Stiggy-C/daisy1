@@ -1,4 +1,3 @@
-import torch;
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline;
+import torch
 
-torch.rand(5, 3)
+torch.rand(x, y)

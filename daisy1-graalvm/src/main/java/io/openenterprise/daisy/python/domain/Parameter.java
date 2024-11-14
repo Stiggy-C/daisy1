@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 public enum Parameter implements io.openenterprise.daisy.Parameter {
 
+    PYTHON_PRE_EVAL_SOURCE("daisy.python.pre-eval.source", String[].class),
+
     PYTHON_SCRIPT_URI("daisy.python.script.uri", String.class),
 
     PYTHON_SOURCE("daisy.python.source", String.class)

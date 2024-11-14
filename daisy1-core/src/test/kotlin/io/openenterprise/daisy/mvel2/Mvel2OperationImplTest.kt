@@ -1,9 +1,11 @@
-package io.openenterprise.daisy
+package io.openenterprise.daisy.mvel2
 
 import com.github.f4b6a3.uuid.UuidCreator
-import io.openenterprise.daisy.domain.Parameter
-import io.openenterprise.daisy.mvel2.Mvel2Operation
-import io.openenterprise.daisy.mvel2.Mvel2OperationImpl
+import io.openenterprise.daisy.AbstractOperationImpl
+import io.openenterprise.daisy.Invocation
+import io.openenterprise.daisy.InvocationContext
+import io.openenterprise.daisy.Parameters
+import io.openenterprise.daisy.mvel2.domain.Parameter
 import io.openenterprise.daisy.service.Mvel2EvaluationService
 import io.openenterprise.daisy.service.Mvel2EvaluationServiceImpl
 import org.apache.commons.lang3.reflect.MethodUtils

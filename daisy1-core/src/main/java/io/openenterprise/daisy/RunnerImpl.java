@@ -10,6 +10,8 @@ import javax.annotation.Nonnull;
 import javax.cache.Cache;
 import java.time.Instant;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Named
 public class RunnerImpl implements Runner {
@@ -21,22 +23,22 @@ public class RunnerImpl implements Runner {
 
     @Override
     public void run(@Nonnull InvocationContext invocationContext,
-                    @Nonnull List<Pair<Operation<?>, Parameters>> operationsAndParameters) {
-        operationsAndParameters.stream()
-                .map(pair -> createInvocation(invocationContext, (AbstractOperationImpl<?>) pair.getKey(), pair.getValue()))
-                .peek(invocationContext::setCurrentInvocation)
-                .peek(invocation -> invocation.operation.preInvoke(invocationContext, invocation, invocation.parameters))
-                .peek(this::runOperation)
-                .peek(invocation -> invocation.operation.postInvoke(invocationContext, invocation, invocation.result))
-                .forEachOrdered(invocation -> {
-                    invocationContext.currentInvocation = null;
-                    invocationContext.previousInvocations.add(invocation);
-                });
+                    @Nonnull List<Pair<Operation<?>, Parameters>> operationAndParameterPairs) {
+        var invocations = operationAndParameterPairs.stream()
+                .map(pair -> createInvocation(invocationContext, pair.getKey(), pair.getValue()))
+                .toList();
+        var runner = this;
+
+        invocations.forEach(invocation -> {
+            invocationContext.setCurrentInvocation(invocation);
+            runner.runOperation(invocation);
+            invocationContext.archiveCurrentInvocation();
+        });
     }
 
     @Override
     public void run(@Nonnull UUID invocationContextId,
-                    @Nonnull List<Pair<Operation<?>, Parameters>> operationsAndParameters) {
+                    @Nonnull List<Pair<Operation<?>, Parameters>> operationAndParameterPairs) {
         var invocationContext = Optional.ofNullable(invocationContextCache.get(invocationContextId)).orElseGet(() -> {
             var thisInvocationContext = new InvocationContext.Builder().withId(invocationContextId).build();
 
@@ -47,10 +49,10 @@ public class RunnerImpl implements Runner {
             }
         });
 
-        run(invocationContext, operationsAndParameters);
+        run(invocationContext, operationAndParameterPairs);
     }
 
-    protected <T extends AbstractOperationImpl<S>, S> Invocation<T , S> createInvocation(
+    protected <T extends Operation<S>, S> Invocation<T , S> createInvocation(
             @Nonnull InvocationContext invocationContext, @Nonnull T operation, @Nonnull Parameters parameters) {
         var invocation = new Invocation<T, S>();
 
@@ -61,7 +63,7 @@ public class RunnerImpl implements Runner {
         return invocation;
     }
 
-    protected <T extends AbstractOperationImpl<S>, S> void runOperation(@Nonnull Invocation<T, S> invocation) {
+    protected <T extends Operation<S>, S> void runOperation(@Nonnull Invocation<T, S> invocation) {
         try {
             invocation.setInvocationInstant(Instant.now());
             invocation.result = invocation.operation.invoke(invocation);
