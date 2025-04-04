@@ -1,88 +1,49 @@
 package io.openenterprise.daisy;
 
-import com.github.f4b6a3.uuid.UuidCreator;
+import io.openenterprise.commons.util.UUIDUtils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.util.Map;
 import java.util.UUID;
 
+@Getter
 public class Invocation<T extends Operation<S>, S> implements Serializable {
 
     public Invocation() {
-        id = UuidCreator.getTimeOrderedWithRandom();
-        createdInstant = Instant.now();
+        id = UUIDUtils.randomUUIDv7();
+        createdDateTime = OffsetDateTime.now();
     }
 
     protected UUID id;
 
-    protected Instant completionInstant;
+    @Setter
+    protected OffsetDateTime completionDateTime;
 
-    protected Instant createdInstant;
+    @Setter
+    protected OffsetDateTime createdDateTime;
 
+    @Setter
     protected InvocationContext invocationContext;
 
-    protected Instant invocationInstant;
+    @Setter
+    protected OffsetDateTime invocationDateTime;
 
+    @Setter
     protected T operation;
 
-    protected Parameters parameters;
+    @Setter
+    protected Map<Parameter, Object> parameters;
 
+    @Setter
     protected S result;
 
+    @Setter
     protected Throwable throwable;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public InvocationContext getInvocationContext() {
-        return invocationContext;
-    }
-
-    public T getOperation() {
-        return this.operation;
-    }
-
-    public Parameters getParameters() {
-        return parameters;
-    }
-
-    public S getResult() {
-        return this.result;
-    }
-
-    public void setCompletionInstant(Instant completionInstant) {
-        this.completionInstant = completionInstant;
-    }
-
-    public void setCreatedInstant(Instant createdInstant) {
-        this.createdInstant = createdInstant;
-    }
-
-    public void setInvocationContext(InvocationContext invocationContext) {
-        this.invocationContext = invocationContext;
-    }
-
-    public void setInvocationInstant(Instant invocationInstant) {
-        this.invocationInstant = invocationInstant;
-    }
-
-    public void setOperation(T operation) {
-        this.operation = operation;
-    }
-
-    public void setParameters(Parameters parameters) {
-        this.parameters = parameters;
-    }
-
-    public void setResult(S result) {
-        this.result = result;
-    }
-
-    public void setThrowable(Throwable throwable) {
-        this.throwable = throwable;
-    }
 
     public static class Builder<T extends AbstractOperationImpl<S>, S> {
 

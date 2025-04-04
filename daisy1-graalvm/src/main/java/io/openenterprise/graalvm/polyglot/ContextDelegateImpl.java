@@ -3,8 +3,8 @@ package io.openenterprise.graalvm.polyglot;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Value;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public class ContextDelegateImpl implements ContextDelegate {
 

@@ -3,7 +3,7 @@ package io.openenterprise.daisy;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.util.*;
 
 @Getter
@@ -33,20 +33,8 @@ public class InvocationContext {
         currentInvocation = null;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public Invocation<? extends Operation<?>, ?> getCurrentInvocation() {
-        return currentInvocation;
-    }
-
     public SortedSet<Invocation<? extends Operation<?>, ?>> getPreviousInvocation() {
         return previousInvocations;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public <T extends Operation<S>, S> void setCurrentInvocation(@Nonnull Invocation<T, S> currentInvocation) {

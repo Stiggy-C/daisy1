@@ -1,13 +1,11 @@
 package io.openenterprise.daisy.mvel2
 
-import com.github.f4b6a3.uuid.UuidCreator
+import io.openenterprise.commons.util.UUIDUtils
 import io.openenterprise.daisy.AbstractOperationImpl
 import io.openenterprise.daisy.Invocation
 import io.openenterprise.daisy.InvocationContext
-import io.openenterprise.daisy.Parameters
-import io.openenterprise.daisy.mvel2.domain.Parameter
-import io.openenterprise.daisy.service.Mvel2EvaluationService
-import io.openenterprise.daisy.service.Mvel2EvaluationServiceImpl
+import io.openenterprise.daisy.mvel2.service.Mvel2EvaluationService
+import io.openenterprise.daisy.mvel2.service.Mvel2EvaluationServiceImpl
 import org.apache.commons.lang3.reflect.MethodUtils
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation
@@ -41,7 +39,7 @@ class Mvel2OperationImplTest {
     @Test
     fun `Test invoke`() {
         val invocationContext = createTestInvocationContext()
-        val parameters = Parameters()
+        val parameters = mutableMapOf<io.openenterprise.daisy.Parameter, Any>()
         parameters[Parameter.MVEL_CLASS_IMPORTS] = arrayOf<String>()
         parameters[Parameter.MVEL_EXPRESSIONS] = arrayOf("variable = 0;variable")
         parameters[Parameter.MVEL_PACKAGE_IMPORTS] = arrayOf<String>()
@@ -64,7 +62,7 @@ class Mvel2OperationImplTest {
         val invocationContext = createTestInvocationContext()
         @Suppress("UNCHECKED_CAST")
         val invocation = invocationContext.currentInvocation as Invocation<Mvel2OperationImpl<Any>, Any>
-        val parameters = Parameters()
+        val parameters = mutableMapOf<io.openenterprise.daisy.Parameter, Any>()
         parameters[Parameter.MVEL_CLASS_IMPORTS] = arrayOf<String>()
         parameters[Parameter.MVEL_EXPRESSIONS] = arrayOf("variable = 0;variable")
         parameters[Parameter.MVEL_PACKAGE_IMPORTS] = arrayOf<String>()
@@ -106,7 +104,7 @@ class Mvel2OperationImplTest {
     }
 
     private fun createTestInvocationContext(): InvocationContext {
-        val invocationContext = InvocationContext(UuidCreator.getTimeOrderedWithRandom())
+        val invocationContext = InvocationContext(UUIDUtils.randomUUIDv7())
         val invocation: Invocation<in AbstractOperationImpl<Any>, Any> = Invocation()
         invocation.operation = mvel2Operation
         invocation.invocationContext = invocationContext

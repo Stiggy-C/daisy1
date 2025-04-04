@@ -32,8 +32,8 @@ public class PythonConfiguration {
         var genericObjectPoolConfig = new GenericObjectPoolConfig<ContextDelegate>();
         genericObjectPoolConfig.setFairness(true);
         genericObjectPoolConfig.setMinIdle(1);
-        genericObjectPoolConfig.setMaxIdle(1);
-        genericObjectPoolConfig.setMaxTotal(1);
+        genericObjectPoolConfig.setMaxIdle(Runtime.getRuntime().availableProcessors());
+        genericObjectPoolConfig.setMaxTotal(Runtime.getRuntime().availableProcessors());
 
         return genericObjectPoolConfig;
     }

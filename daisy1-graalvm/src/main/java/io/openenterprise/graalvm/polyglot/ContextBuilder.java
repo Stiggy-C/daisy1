@@ -2,7 +2,7 @@ package io.openenterprise.graalvm.polyglot;
 
 import org.graalvm.polyglot.Context;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface ContextBuilder {
 

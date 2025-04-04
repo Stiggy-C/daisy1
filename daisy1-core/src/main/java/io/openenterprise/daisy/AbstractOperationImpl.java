@@ -3,8 +3,10 @@ package io.openenterprise.daisy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
+import java.util.Map;
 import java.util.Optional;
 
 public abstract class AbstractOperationImpl<T> implements Operation<T> {
@@ -23,7 +25,7 @@ public abstract class AbstractOperationImpl<T> implements Operation<T> {
 
     protected void preInvoke(@Nonnull InvocationContext invocationContext,
                              @Nonnull Invocation<? extends Operation<T>, T> invocation,
-                             @Nonnull Parameters parameters) {
+                             @Nonnull Map<io.openenterprise.daisy.Parameter, Object> parameters) {
         LOGGER.debug("{}.preInvoke invoked", this.getClass());
     }
 
@@ -35,7 +37,7 @@ public abstract class AbstractOperationImpl<T> implements Operation<T> {
 
     @Nullable
     @SuppressWarnings("unchecked")
-    protected <S> S readParameterValue(@Nonnull Parameters parameters, @Nonnull Parameter parameter) {
+    protected <S> S readParameterValue(@Nonnull Map<Parameter, Object> parameters, @Nonnull Parameter parameter) {
         return Optional.ofNullable(parameters.get(parameter))
                 .map(param -> ((Class<S>) parameter.getValueType()).cast(param))
                 .orElse(null);

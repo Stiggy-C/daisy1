@@ -4,7 +4,7 @@ import io.openenterprise.daisy.InvocationContext
 import io.openenterprise.daisy.Operation
 import org.mvel2.integration.VariableResolverFactory
 import java.util.function.Consumer
-import javax.annotation.Nonnull
+import jakarta.annotation.Nonnull
 
 interface Mvel2Operation<T> : Operation<T> {
 

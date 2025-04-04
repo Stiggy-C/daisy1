@@ -5,20 +5,16 @@ import io.openenterprise.daisy.AbstractOperationImpl
 import io.openenterprise.daisy.Invocation
 import io.openenterprise.daisy.InvocationContext
 import io.openenterprise.daisy.Operation
-import io.openenterprise.daisy.Parameters
-import io.openenterprise.daisy.mvel2.domain.Parameter
 import io.openenterprise.daisy.mvel2.integration.impl.CachingMapVariableResolverFactory
-import io.openenterprise.daisy.service.Mvel2EvaluationService
+import io.openenterprise.daisy.mvel2.service.Mvel2EvaluationService
 import jakarta.inject.Inject
 import jakarta.inject.Named
 import org.apache.commons.lang3.ArrayUtils
 import org.apache.commons.lang3.ClassUtils
-import org.mvel2.MVEL
 import org.mvel2.integration.VariableResolverFactory
 import java.util.*
 import java.util.function.Consumer
-import javax.annotation.Nonnull
-import javax.annotation.Nullable
+import jakarta.annotation.Nonnull
 import javax.cache.Cache
 
 @Named
@@ -37,7 +33,7 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
     override fun preInvoke(
         @Nonnull invocationContext: InvocationContext,
         @Nonnull invocation: Invocation<out Operation<T>, T>,
-        @Nonnull parameters: Parameters
+        @Nonnull parameters: Map<io.openenterprise.daisy.Parameter, Any>
     ) {
         super.preInvoke(invocationContext, invocation, parameters)
 
@@ -63,7 +59,7 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
     @Suppress("UNCHECKED_CAST")
     override fun invoke(@Nonnull invocation: Invocation<*, T>): T? {
         val invocationContextId = invocation.invocationContext.id
-        val parameters: Parameters = invocation.parameters
+        val parameters: Map<io.openenterprise.daisy.Parameter, Any> = invocation.parameters
         val classesToImports = getClassesToImport(parameters)
         val packagesToImports = getPackagesToImport(parameters)
         val mvelExpressions: Array<String> = readParameterValue(parameters, Parameter.MVEL_EXPRESSIONS)!!
@@ -108,7 +104,7 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
         return result
     }
 
-    protected fun getClassesToImport(parameters: Parameters): Set<Class<*>> {
+    protected fun getClassesToImport(parameters: Map<io.openenterprise.daisy.Parameter, Any>): Set<Class<*>> {
         val classImportsAsStringArray: Array<String>? = readParameterValue(parameters, Parameter.MVEL_CLASS_IMPORTS)
         val classImports = if (ArrayUtils.isEmpty(classImportsAsStringArray)) {
             Collections.emptySet<Class<*>>()
@@ -118,7 +114,7 @@ open class Mvel2OperationImpl<T> : AbstractOperationImpl<T>(), Mvel2Operation<T>
         return classImports
     }
 
-    protected fun getPackagesToImport(parameters: Parameters): Set<String> {
+    protected fun getPackagesToImport(parameters: Map<io.openenterprise.daisy.Parameter, Any>): Set<String> {
         val packageImportsAsStringArray: Array<String>? = readParameterValue(parameters, Parameter.MVEL_PACKAGE_IMPORTS)
         val packageImports = if (ArrayUtils.isEmpty(packageImportsAsStringArray)) {
             Collections.emptySet<String>()

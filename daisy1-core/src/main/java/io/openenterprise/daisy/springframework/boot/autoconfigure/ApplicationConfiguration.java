@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.cache.CacheManager;
 import javax.cache.Caching;
 import java.util.Map;

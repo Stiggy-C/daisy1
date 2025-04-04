@@ -3,7 +3,7 @@ package io.openenterprise.daisy.mvel2.integration.impl
 import com.google.common.collect.Maps
 import org.mvel2.integration.VariableResolver
 import org.mvel2.integration.impl.CachingMapVariableResolverFactory
-import javax.annotation.Nonnull
+import jakarta.annotation.Nonnull
 
 class CachingMapVariableResolverFactory @JvmOverloads constructor(@Nonnull variables: Map<String, Any> = Maps.newHashMap()) :
     CachingMapVariableResolverFactory(variables) {

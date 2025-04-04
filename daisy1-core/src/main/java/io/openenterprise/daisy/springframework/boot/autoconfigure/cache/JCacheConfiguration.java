@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.cache.Cache;
 import javax.cache.CacheManager;
 import java.util.UUID;

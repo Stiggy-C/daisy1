@@ -5,9 +5,8 @@ import com.google.common.collect.Lists
 import io.openenterprise.daisy.Invocation
 import io.openenterprise.daisy.InvocationContext
 import io.openenterprise.daisy.Operation
-import io.openenterprise.daisy.Parameters
 import io.openenterprise.daisy.mvel2.Mvel2OperationImpl
-import io.openenterprise.daisy.python.domain.Parameter
+import io.openenterprise.daisy.python.Parameter
 import io.openenterprise.graalvm.polyglot.ContextDelegate
 import jakarta.inject.Inject
 import jakarta.inject.Named
@@ -18,7 +17,6 @@ import org.apache.commons.pool2.ObjectPool
 import org.mvel2.MVEL
 import org.mvel2.integration.VariableResolverFactory
 import org.springframework.core.io.ClassPathResource
-import java.util.Collections
 import java.util.Objects
 import java.util.function.Consumer
 import java.util.stream.Collectors
@@ -40,7 +38,7 @@ class PythonOperationImpl<T> : Mvel2OperationImpl<T>(), PythonOperation<T> {
     override fun preInvoke(
         invocationContext: InvocationContext,
         invocation: Invocation<out Operation<T>, T>,
-        parameters: Parameters
+        parameters: Map<io.openenterprise.daisy.Parameter, Any>
     ) {
         if (parameters.containsKey(Parameter.PYTHON_SCRIPT_URI) && parameters.containsKey(Parameter.PYTHON_SOURCE)) {
             throw IllegalArgumentException("")
@@ -90,7 +88,7 @@ class PythonOperationImpl<T> : Mvel2OperationImpl<T>(), PythonOperation<T> {
             pythonOpResultVariableName
         )
 
-        parameters[io.openenterprise.daisy.mvel2.domain.Parameter.MVEL_EXPRESSIONS] = mvelExpressions
+        (parameters as MutableMap)[io.openenterprise.daisy.mvel2.Parameter.MVEL_EXPRESSIONS] = mvelExpressions
     }
 
     override fun createVariableResolverFactory(

@@ -1,0 +1,205 @@
+openapi: 3.0.3
+info:
+  title: Daisy API
+  version: 1.0.0
+  license:
+    name: Apache 2.0
+paths:
+  /actions:
+    post:
+      operationId: postAction
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/action'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action'
+          description: 'Created'
+      tags:
+        - actions
+  /actions/{id}:
+    delete:
+      operationId: deleteActionById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: 'No Content'
+      tags:
+        - actions
+    get:
+      operationId: getActionById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action'
+          description: 'OK'
+      tags:
+        - actions
+    head:
+      operationId: headActionById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: 'No Content'
+      tags:
+        - actions
+  /actions-chain:
+    post:
+      operationId: PostActionsChain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/actionsChain'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/actionsChain'
+          description: 'Created'
+      tags:
+        - actionsChain
+  /actions-chain/{id}:
+    delete:
+      operationId: deleteActionsChainById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: 'No Content'
+      tags:
+        - actionsChain
+    get:
+      operationId: getActionsChainById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/action'
+          description: 'OK'
+      tags:
+        - actionsChain
+    head:
+      operationId: headActionsChainById
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        204:
+          description: 'No Content'
+      tags:
+        - actionsChain
+  /actions-chain/{id}/invoke:
+    post:
+      operationId: invokeActionsChainById
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/sessionId'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+          description: 'OK'
+      tags:
+        - actionsChain
+  /actions-chain/invoke:
+    post:
+      operationId: invokeActionsChain
+      parameters:
+        - $ref: '#/components/parameters/sessionId'
+        - in: query
+          name: persist
+          schema:
+            type: boolean
+          description: Persist the given actions chain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/actionsChain'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+          description: 'OK'
+      tags:
+        - actionsChain
+components:
+  parameters:
+    id:
+      description: Entity ID
+      in: path
+      name: id
+      required: true
+      schema:
+        format: uuid
+        type: string
+    sessionId:
+      description: Session ID
+      in: header
+      name: X-Daisy-Session-Id
+      schema:
+        type: string
+        format: uuid
+  schemas:
+    action:
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdBy:
+          type: string
+        createdInstant:
+          type: string
+          format: date-time
+        operation:
+          type: string
+        parameters:
+          type: object
+          additionalProperties: true
+        updatedBy:
+          type: string
+        updatedInstant:
+          type: string
+          format: date-time
+      required:
+        - operation
+      type: object
+    actionsChain:
+      properties:
+        id:
+          type: string
+          format: uuid
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/action'
+        createdBy:
+          type: string
+        createdInstant:
+          format: date-time
+          type: string
+        updatedBy:
+          type: string
+        updatedInstant:
+          format: date-time
+          type: string
+      type: object
