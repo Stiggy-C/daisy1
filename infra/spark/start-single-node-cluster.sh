@@ -1,9 +1,12 @@
 #!/bin/sh
 
+number_of_cores=$(getconf _NPROCESSORS_ONLN)
+
+export SPARK_MASTER_OPTS="-Dspark.deploy.defaultCores=$((number_of_cores/4))"
+
 /opt/spark/sbin/start-master.sh | \
-/opt/spark/sbin/start-worker.sh spark://$(hostname):7077 | \
+/opt/spark/sbin/start-worker.sh spark://$(hostname):7077) | \
 /opt/spark/sbin/start-connect-server.sh \
-  --packages org.apache.spark:spark-connect_2.13:4.0.0-preview2,io.delta:delta-connect-server_2.13:4.0.0rc1,io.delta:delta-connect-common_2.13:4.0.0rc1,com.google.protobuf:protobuf-java:3.25.5 \
   --master spark://$(hostname):7077 \
   --conf "spark.connect.extensions.relation.classes=org.apache.spark.sql.connect.delta.DeltaRelationPlugin" \
   --conf "spark.connect.extensions.command.classes=org.apache.spark.sql.connect.delta.DeltaCommandPlugin" \

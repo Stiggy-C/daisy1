@@ -6,7 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.Engine;
 import org.graalvm.polyglot.io.IOAccess;
-import org.graalvm.python.embedding.utils.VirtualFileSystem;
+import org.graalvm.python.embedding.GraalPyResources;
+import org.graalvm.python.embedding.VirtualFileSystem;
 import org.springframework.beans.factory.annotation.Value;
 
 import static io.openenterprise.daisy.graalvm.SupportedLanguage.PYTHON;
@@ -22,17 +23,20 @@ public class ContextBuilder implements io.openenterprise.graalvm.polyglot.Contex
     @Nonnull
     @Override
     public Context createContext() {
-        var builder = Context.newBuilder(PYTHON.getLanguageId())
+        var builder = (StringUtils.isBlank(pythonExecutableUriAsString) ?
+                GraalPyResources.contextBuilder(
+                        VirtualFileSystem.newBuilder().allowHostIO(VirtualFileSystem.HostIO.READ_WRITE).build()) :
+                Context.newBuilder(PYTHON.getLanguageId()).option("python.Executable", pythonExecutableUriAsString)
+                        .option("python.ForceImportSite", "true"))
                 .allowAllAccess(true)
                 .allowCreateThread(true)
+                .allowIO(IOAccess.ALL)
                 .allowNativeAccess(true)
                 .engine(ENGINE)
+                .option("python.IsolateNativeModules", "true")
                 .option("python.PosixModuleBackend", "native");
-        var context = StringUtils.isBlank(pythonExecutableUriAsString) ?
-                builder.allowIO(IOAccess.newBuilder().fileSystem(VirtualFileSystem.newBuilder().allowHostIO(
-                        VirtualFileSystem.HostIO.READ_WRITE).build()).build()).build() :
-                builder.allowIO(IOAccess.ALL).option("python.Executable", pythonExecutableUriAsString).option(
-                        "python.ForceImportSite", "true").build();
+
+        var context = builder.build();
 
         try {
             return context;
